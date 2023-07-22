@@ -1,0 +1,24 @@
+.footer {
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+  }
+
+  .description-footer{
+    font-size: 15px;
+    color: #a7a7a7;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .description-footer:hover{
+    color: #72aaf7;
+  }
+
+  .icon-footer{
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+
+  .icon-footer:hover{
+    color: #74d569;
+  }
