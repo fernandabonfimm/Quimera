@@ -4,7 +4,7 @@ import LogoHA from "../../../logoHA.png";
 import { Card, Input, Button } from "antd";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import {registerStudent} from "../../../../src/services/routes/api/AuthStudent";
+import { registerStudent } from "../../../../src/services/routes/api/AuthStudent";
 
 export default function LoginPin() {
   const [pin, setPin] = React.useState("");
@@ -32,7 +32,7 @@ export default function LoginPin() {
     }
     return true;
   }
-
+  const idTeacher = localStorage.getItem("_idTeacher");
   function handleLogin() {
     if (validatePin(pin, name)) {
       localStorage.setItem("pin", pin);
@@ -40,13 +40,22 @@ export default function LoginPin() {
       localStorage.setItem("isTeacher", false);
       localStorage.setItem("isStudent", true);
       localStorage.setItem("userType", "student");
-      registerStudent(name, pin)
+      const body = {
+        name: name,
+        pin: pin,
+        teacherId: idTeacher,
+      };
+      registerStudent(body)
         .then((response) => {
-          console.log("Student registered successfully:", response.data.student);
-        setIdStudent(response.data.student._id);
-        localStorage.setItem("idStudent", response.data.student._id);
+          console.log(
+            "Student registered successfully:",
+            response.data.student
+          );
+          setIdStudent(response.data.student._id);
+          localStorage.setItem("idStudent", response.data.student._id);
           navigate(`/waitingroom/${pin}`);
-        }).catch(err => {
+        })
+        .catch((err) => {
           console.log(err);
           Swal.fire({
             icon: "error",

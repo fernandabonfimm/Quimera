@@ -17,6 +17,19 @@ const studentSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  teacher: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Teacher",
+    required: false,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model("Student", studentSchema);

@@ -67,3 +67,30 @@
   justify-content: flex-start;
   margin-bottom: 10px;
 }
+.CardsDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.bigger {
+  width: 70%;
+}
+.small {
+  width: 30%;
+}
+@media screen and (max-width: 800px) {
+  .CardsDiv {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .bigger {
+    width: 100%;
+  }
+  .small {
+    width: 100%;
+  }
+}

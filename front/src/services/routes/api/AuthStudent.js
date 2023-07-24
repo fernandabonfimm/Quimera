@@ -1,7 +1,6 @@
 import { api } from "../../api";
 
-async function registerStudent(name, pin) {
-  const body = { name, pin };
+async function registerStudent(body) {
   return await api.post("students", body);
 }
 

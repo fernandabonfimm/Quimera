@@ -10,6 +10,36 @@
     flex-direction: row;
 }
 
+.colDivContent{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.btnGoBack{
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    gap: 10px;
+    cursor: pointer;
+    color: #464646;
+}
+.btnGoBack:hover{
+    color: #000;
+    background-color: transparent;  
+}
+
+.btnDivBack{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: row;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
 .labelexperimento{
     font-size: 16px;
     font-weight: 600;

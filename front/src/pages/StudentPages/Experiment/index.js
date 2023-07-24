@@ -13,13 +13,13 @@ import {
   getPhaseOne,
   getGraphic,
   getDataByPin,
+  getInicialGraphic,
 } from "../../../services/routes/api/Experiment";
 import { postAnswer } from "../../../services/routes/api/AuthStudent";
 
 const Experiment = () => {
   const { pin } = useParams();
   const idStudent = localStorage.getItem("idStudent");
-  const navigate = useNavigate();
   const storedName = localStorage.getItem("name");
   const [showB1, setShowB1] = React.useState(false);
   const [showB2, setShowB2] = React.useState(false);
@@ -29,6 +29,7 @@ const Experiment = () => {
   });
   const [phaseOne, setPhaseOne] = React.useState({});
   const [graphic, setGraphic] = React.useState({});
+  const [inicialGraphic, setInicialGraphic] = React.useState({});
   const [experimentData, setExperimentData] = React.useState([]);
 
   React.useEffect(() => {
@@ -60,28 +61,53 @@ const Experiment = () => {
 
   const [isButtonDisabled, setIsButtonDisabled] = React.useState(true);
   const [isResultVisible, setIsResultVisible] = React.useState(false);
+  const [answerOneStorage, setAnswerOneStorage] = React.useState("");
+  const [answerTwoStorage, setAnswerTwoStorage] = React.useState("");
+
+  const getDatas = () => {
+    getInicialGraphic(idStudent).then((response) => {
+      setInicialGraphic(response.data);
+    });
+  };
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      getDatas();
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   const handleButtonDisabled = () => {
     setIsButtonDisabled(false);
     setIsResultVisible(false);
-
-    postAnswer(idStudent, {
-      answerOne: Object.keys(selectedOptionsB1)[0],
-      answerTwo: Object.keys(selectedOptionsB2)[0],
-    }).then(() => {
+    const answerOneString = Object.keys(selectedOptionsB1)[0].toString();
+    const answerTwoString = Object.keys(selectedOptionsB2)[0].toString();
+    const answerOne = options.optionsOne.find(
+      (option) => option.value === answerOneString
+    );
+    const answerTwo = options.optionsTwo.find(
+      (option) => option.value === answerTwoString
+    );
+    const answer = {
+      answerOne: answerOne.label,
+      answerTwo: answerTwo.label,
+    };
+    setAnswerOneStorage(answerOne.label);
+    setAnswerTwoStorage(answerTwo.label);
+    console.log(answer);
+    postAnswer(idStudent, answer).then((response) => {
       Swal.fire({
         icon: "success",
-        title: "O experimento foi concluido com sucesso!",
-        description: "Aguarde o experimento começar...",
+        title: "Resposta enviada com sucesso!",
         showConfirmButton: false,
+        timer: 1500,
       });
+      getDatas();
     });
-    getGraphic(idStudent).then((response) => {
-      setGraphic(response.data);
-      console.log(response.data);
-    });
+
     setIsButtonDisabled(true);
     setIsResultVisible(true);
   };
+
   const [selectedOptionsB1, setSelectedOptionsB1] = React.useState({});
 
   const [selectedOptionsB2, setSelectedOptionsB2] = React.useState({});
@@ -127,9 +153,9 @@ const Experiment = () => {
               Título: {experimentData.title}
             </h3>
             <span className="description-cardExperiment">
-             Descrição: {experimentData.description}
+              Descrição: {experimentData.description}
             </span>
-            <br/>
+            <br />
             <p className="subtitle-cardExperiment">
               Informe a OP1 e OP2 (Opções) para realizar o experimento
             </p>
@@ -228,11 +254,54 @@ const Experiment = () => {
             </div>
           </Card>
           <Card className="card-chartsExperiment">
+            {answerOneStorage === "Hipotálamo" && answerTwoStorage === "ADH" ? (
+              <div>
+                <h3>
+                  Você acertou as duas respostas, {answerOneStorage} 80% e{" "}
+                  {answerTwoStorage} 20%
+                </h3>
+              </div>
+            ) : answerOneStorage === "Hipotálamo" ? (
+              <div>
+                <h3>
+                  Você acertou a primeira resposta, {answerOneStorage} 80%
+                </h3>
+              </div>
+            ) : answerTwoStorage === "ADH" ? (
+              <div>
+                <h3>Você acertou a segunda resposta, {answerTwoStorage} 20%</h3>
+              </div>
+            ) : (
+              <div>
+                <h3>Você ainda não acertou nenhuma resposta</h3>
+              </div>
+            )}
             <div className="contentChart-cardExperiment">
-              <WaterfallChart
-                experimentData={graphic.correct}
-                studentData={graphic.answerStudent}
-              />
+              {isResultVisible ? (
+                <>
+                  {graphic?.data?.expectedValue &&
+                  graphic?.data?.studentValue ? (
+                    <WaterfallChart
+                      experimentData={graphic?.data.expectedValue}
+                      studentData={graphic?.data.studentValue}
+                    />
+                  ) : (
+                    <h3>Carregando gráfico...</h3>
+                  )}
+                </>
+              ) : (
+                <>
+                  {inicialGraphic?.data?.expectedValue &&
+                  inicialGraphic?.data?.studentValue ? (
+                    <WaterfallChart
+                      experimentData={inicialGraphic?.data.expectedValue}
+                      studentData={inicialGraphic?.data.studentValue}
+                    />
+                  ) : (
+                    <h3>Carregando o gráfico inicial...</h3>
+                  )}
+                </>
+              )}
             </div>
           </Card>
         </div>

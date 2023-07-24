@@ -14,7 +14,7 @@ const FooterComponent = () => {
             <span className="description-footer">
               Developed with
               <AiOutlineHeart className="icon-footer" />
-              by CodeBarão
+              by <a href="https://fernandabonfim.tech/">fernandabonfim.tech</a>
             </span>
           </Col>
         </Row>

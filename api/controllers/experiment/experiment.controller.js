@@ -1,8 +1,8 @@
-const StudentModel = require("../../models/userSchema/student.model");
 const Experiment = require("./../../models/experiment/experiment.model");
 const crypto = require("crypto");
 const Student = require("@/controllers/auth/studentAuth.controller.js");
 const options = require("./options");
+const StudentModel = require("../../models/userSchema/student.model.js");
 
 module.exports = {
   async create(req, res) {
@@ -110,38 +110,74 @@ module.exports = {
     }
   },
 
-  async getGrahpic(req, resp) {
-    const student = await Student.findById(req.params.id);
+  async getGraphic(req, resp) {
+    const studentId = req.params.idStudent;
 
-    const [optionsOne, optionsTwo] = require("./options");
-    let valueAnswer = 0;
+    const student = await Student.findById(studentId);
 
-    for (let option of optionsOne) {
-      if (student.answerOne === option.label) {
-        valueAnswer += option.valueAnswer;
-      }
+    if (!student) {
+      return resp.status(404).json({ message: "Student not found." });
+    } 
+
+    const tempo = require("./result_tables/time").default;
+    const valor_corrigido = require("./result_tables/correctJsonValue");
+    const valor_corrigido_80 = require("./result_tables/80correctJson");
+    const valor_corrigido_20 = require("./result_tables/20correctJson");
+    const valor_semCorrecao = require("./result_tables/noCorrectJson");
+
+    let answerData;
+
+    if (student.answerOne === "Hipotálamo" && student.answerTwo === "ADH") {
+      answerData = valor_corrigido;
+    } else if (student.answerOne === "Hipotálamo") {
+      answerData = valor_corrigido_80;
+    } else if (student.answerTwo === "ADH") {
+      answerData = valor_corrigido_20;
+    } else {
+      answerData = valor_semCorrecao;
     }
 
-    for (let option of optionsTwo) {
-      if (student.answerTwo === option.label) {
-        valueAnswer += option.valueAnswer;
-      }
-    }
+    const data = {
+      time: tempo,
+      studentValue: answerData,
+      expectedValue: valor_corrigido,
+    };
 
-    const initial = require("./result_tables/0_420");
-    const answer = require(`./result_tables/420_1440_${valueAnswer * 100}`);
-    const _correct = require("./result_tables/420_1440_100");
-
-    resp.json({
-      correct: [...initial.concat(_correct.slice(420))],
-      answerStudent: [...initial.concat(answer.slice(420))],
-    });
+    return resp.json({ data });
   },
 
-  async getCorrectGraphic(req, resp) {
-    const _correct = require("./result_tables/420_1440_100");
-    resp.json({
-      correct: [..._correct],
-    });
+  async getInicialGrahic(req, resp) {
+    const tempo = require("./result_tables/time").default;
+    const valor_inicial = require("./result_tables/initialJson");
+
+    const data = {
+      time: tempo,
+      studentValue: valor_inicial,
+      expectedValue: valor_inicial,
+    };
+
+    return resp.json({ data });
+  },
+
+  async getExperimentAndStudentCounts(req, res) {
+    try {
+      const teacherId = req.params.teacherId;
+
+      const experimentCount = await Experiment.countDocuments({
+        teacher: teacherId,
+      });
+
+      const studentsParticipated = await StudentModel.find({
+        teacher: teacherId,
+      }).distinct("pin");
+      const studentCount = studentsParticipated.length;
+
+      res.json({ experimentCount, studentCount });
+    } catch (err) {
+      console.error(err);
+      res
+        .status(500)
+        .json({ error: "Error fetching experiment and student counts" });
+    }
   },
 };

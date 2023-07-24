@@ -10,9 +10,11 @@ import { postExperiment } from "../../../services/routes/api/Experiment";
 
 const Search = () => {
   const navigate = useNavigate();
-  const [searchName, setSearchName] = useState();
-  const [description, setDescription] = useState();
+  const [searchName, setSearchName] = useState("");
+  const [description, setDescription] = useState("");
+
   const idTeacher = localStorage.getItem("_idTeacher");
+
   const handleSearch = () => {
     if (!searchName) {
       Alert.fire({
@@ -26,10 +28,12 @@ const Search = () => {
       });
     } else {
       try {
-        postExperiment(idTeacher, searchName, description).then((response) => {
-          localStorage.setItem("pin", response.data.experiment.pin);
-          localStorage.setItem("_id", response.data.experiment._id);
-          localStorage.setItem("idValue", response.data.experiment._id);
+        const body = {
+          title: searchName,
+          description: description,
+        };
+
+        postExperiment(idTeacher, body).then((response) => {
           Alert.fire({
             icon: "success",
             title: "Experimento criado com sucesso!",

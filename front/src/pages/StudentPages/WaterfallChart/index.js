@@ -17,7 +17,7 @@ export default function WaterfallChart({ experimentData, studentData }) {
     studentData &&
     experimentData.map((d, i) => ({
       index: i,
-      experiment: d,
+      Experimento: d,
       [storedName]: studentData[i],
     }));
 
@@ -32,7 +32,7 @@ export default function WaterfallChart({ experimentData, studentData }) {
       <YAxis domain={["auto", "auto"]} allowDataOverflow={true} />
       <Tooltip />
       <Legend />
-      <Line type="monotone" dataKey="experiment" stroke="#8884d8" />
+      <Line type="monotone" dataKey="Experimento" stroke="#8884d8" />
       <Line type="monotone" dataKey={`${storedName}`} stroke="#82ca9d" />
       {hasNegativeValue && (
         <ReferenceLine

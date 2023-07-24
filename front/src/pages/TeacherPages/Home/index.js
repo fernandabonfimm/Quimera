@@ -10,6 +10,7 @@ import { BsTrash, BsEye, BsFileEarmarkExcel } from "react-icons/bs";
 import Swal from "sweetalert2";
 import "./styles.css";
 import { useNavigate } from "react-router-dom";
+import PieChartComponent from "components/PieChart";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -99,6 +100,11 @@ const Home = () => {
     },
   ];
 
+  const data = [
+    { name: "Experiments", value: 10 },
+    { name: "Students", value: 50 },
+  ];
+
   return (
     <>
       <Base
@@ -108,21 +114,32 @@ const Home = () => {
         titlepage={"à Dashboard,"}
         nameofuser={response?.name}
         children={
-          <Card className="page-card-home">
-            <div>
-              <h3 className="title-card-home">
-                Tabela de todos os experimentos
-              </h3>
-            </div>
-            <div className="table-home">
-              <Table
-                columns={columns}
-                dataSource={experiments}
-                rowKey="_id"
-                style={{ width: "100%" }}
-              />
-            </div>
-          </Card>
+          <div className="CardsDiv">
+            <Card className="page-card-home bigger">
+              <div>
+                <h3 className="title-card-home">
+                  Tabela de todos os experimentos
+                </h3>
+              </div>
+              <div className="table-home">
+                <Table
+                  columns={columns}
+                  dataSource={experiments}
+                  rowKey="_id"
+                  style={{ width: "100%" }}
+                />
+              </div>
+            </Card>
+            <Card className="page-card-home small">
+              <div>
+                <h3 className="title-card-home">
+                  Gráfico da quantidade de todos os experimentos
+                  realizados e alunos que participaram
+                </h3>
+              </div>
+              <PieChartComponent data={data} />
+            </Card>
+          </div>
         }
       />
     </>

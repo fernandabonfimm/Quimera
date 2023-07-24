@@ -1,27 +1,36 @@
-const express = require('express');
-const jwt = require('jsonwebtoken');
-const ExperimentController = require('@/controllers/experiment/experiment.controller');
-const logger = require('@/logger/logger');
+const express = require("express");
+const jwt = require("jsonwebtoken");
+const ExperimentController = require("../../controllers/experiment/experiment.controller.js");
+const logger = require("@/logger/logger");
 
 const routes = express.Router();
 
-routes.post('/experiments/:teacherId', ExperimentController.create);
+routes.post("/experiments/:teacherId", ExperimentController.create);
 
-routes.get('/experiments/:teacherId', ExperimentController.getExperimentsByTeacherId);
+routes.delete("/experiments/:id", ExperimentController.delete);
 
-routes.get('/experiments/:teacherId/:experimentId', ExperimentController.getExperimentByTeacherAndExperimentId);
+routes.get("/experiments/pin/:pin", ExperimentController.findByPin);
 
-routes.delete('/experiments/:id', ExperimentController.delete);
+routes.get("/experiments/getAnswer/:idStudent", ExperimentController.getGraphic);
+routes.get("/experiments/getInicialAnswer/:idStudent", ExperimentController.getInicialGrahic);
 
-routes.get('/experiments/pin/:pin', ExperimentController.findByPin);
+routes.get("/experiments/getOptions", ExperimentController.getOptions);
 
-routes.get('/experiments/getAnswer', ExperimentController.getGrahpic);
+routes.get("/experiments/getPhaseOne", ExperimentController.getPhaseOne);
 
-routes.get('/experiments/getOptions', ExperimentController.getOptions);
+routes.get(
+  "/experiments/count/:teacherId",
+  ExperimentController.getExperimentAndStudentCounts
+);
 
-routes.get('/experiments/getPhaseOne', ExperimentController.getPhaseOne);
+routes.get(
+  "/experiments/:teacherId",
+  ExperimentController.getExperimentsByTeacherId
+);
 
-routes.get('/experiments/correctGraphic/:id', ExperimentController.getCorrectGraphic);
-
+routes.get(
+  "/experiments/:teacherId/:experimentId",
+  ExperimentController.getExperimentByTeacherAndExperimentId
+);
 
 module.exports = routes;

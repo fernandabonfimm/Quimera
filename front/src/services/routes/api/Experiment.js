@@ -1,7 +1,6 @@
 import { api } from "../../api";
 
-function postExperiment(_idTeacher, title, description) {
-  const body = { title, description };
+function postExperiment(_idTeacher, body) {
   return api.post(`experiments/${_idTeacher}`, body);
 }
 
@@ -26,7 +25,11 @@ async function getPhaseOne() {
 }
 
 async function getGraphic(id) {
-  return await api.get(`/experiments/graphic/${id}`);
+  return await api.get(`/experiments/getAnswer/${id}`);
+}
+
+async function getInicialGraphic(id) {
+  return await api.get(`/experiments/getInicialAnswer/${id}`);
 }
 
 async function getDataByPin(pin) {
@@ -47,4 +50,5 @@ export {
   getOptions,
   getPhaseOne,
   getGraphic,
+  getInicialGraphic
 };
