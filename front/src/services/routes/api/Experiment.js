@@ -40,6 +40,14 @@ async function getCorrectGraphic(id) {
   return await api.get(`/experiments/correctGraphic/${id}`);
 }
 
+//rotas para todos os graficos de resultados
+
+async function getTotalCorrectGraphic(id) {
+  return await api.get(`/experiments/${id}/graphic`);
+}
+
+
+
 export {
   getDataByPin,
   getCorrectGraphic,
@@ -50,5 +58,7 @@ export {
   getOptions,
   getPhaseOne,
   getGraphic,
-  getInicialGraphic
+  getInicialGraphic,
+  getTotalCorrectGraphic,
+
 };

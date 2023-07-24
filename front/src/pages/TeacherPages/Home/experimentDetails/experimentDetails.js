@@ -1,35 +1,64 @@
 import React from "react";
 import Base from "../../../../components/BaseLayout";
 import { MdOutlineDashboard } from "react-icons/md";
-import { Table, Button, Card, Row, Col } from "antd";
+import { Table, Button, Card, Row, Col, Modal } from "antd";
 import "../styles.css";
 import WaterfallChart from "pages/StudentPages/WaterfallChart";
 import { useParams } from "react-router-dom";
 import { findExperimentById } from "../../../../services/routes/api/Experiment";
 import { getStudentByPin } from "../../../../services/routes/api/AuthStudent";
+import { getTotalCorrectGraphic } from "../../../../services/routes/api/Experiment";
 
 const ExperimentDetailsTeacher = () => {
-  const { idValue, pinValue } = useParams();
+  const { idValue } = useParams();
   const [responseDetails, setResponseDetails] = React.useState([]);
   const [students, setStudents] = React.useState([]);
+  const [pin, setPin] = React.useState();
+  const [responseGraphic, setResponseGraphic] = React.useState({});
+  const [selectedStudentId, setSelectedStudentId] = React.useState(null);
+  const [isModalVisible, setIsModalVisible] = React.useState(false);
+
   const teacherId = localStorage.getItem("_idTeacher");
 
+  const handleShowResultClick = (studentId) => {
+    setSelectedStudentId(studentId);
+    setIsModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedStudentId(null);
+    setIsModalVisible(false);
+  };
+
   React.useEffect(() => {
-    getStudentByPin(pinValue)
-      .then((response) => {
-        setStudents(response.data);
-      })
-      .catch((error) => {
-        if (error.response.status === 404) {
-          console.log("Alunos não encontrados para esse pin.");
-        }
-      });
     findExperimentById(teacherId, idValue).then((response) => {
       setResponseDetails(response.data.experiment);
+      setPin(response.data.experiment.pin);
     });
-  });
+    getTotalCorrectGraphic(selectedStudentId).then((response) => {
+      setResponseGraphic(response.data);
+    });
+  }, []);
 
-  console.log("response details ", responseDetails);
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      getStudentByPin(pin)
+        .then((response) => {
+          setStudents(response.data);
+        })
+        .catch((error) => {
+          if (error.response.status === 404) {
+            console.log("Alunos não encontrados para esse pin.");
+          }
+        });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [responseDetails]);
+
+  const findStudentName = (id) => {
+    const student = students.find((student) => student._id === id);
+    return student?.name;
+  };
 
   return (
     <>
@@ -40,49 +69,70 @@ const ExperimentDetailsTeacher = () => {
         titlepage={"à Dashboard"}
         nameofuser={"Professor(a)"}
         children={
-          <>
-            <Row gutter={[32, 22]}>
-              <Col xs={12} xl={12}>
-                <Card className="page-card-home">
-                  <div className="rowDiv">
-                    <h3>ID do experimento:</h3>
-                    <span>{responseDetails._id}</span>
-                  </div>
-                  <div className="rowDiv">
-                    <h3>Pin da sala do experimento:</h3>
-                    <span>{responseDetails.pin}</span>
-                  </div>
-                  <div className="colDiv">
-                    <h3>Titulo do experimento:</h3>
-                    <span>{responseDetails.title}</span>
-                  </div>
-                  <div className="colDiv">
-                    <h3>Descrição do experimento:</h3>
-                    <span>{responseDetails.description}</span>
-                  </div>
-                  <div className="colDiv">
-                    <h3>Todos os alunos que participaram:</h3>
-                    {students.map((student) => (
-                      <div key={student.id} className="marginBottomLess">
-                        <label>{student.name}</label>
-                      </div>
-                    ))}
-                  </div>
-                </Card>
-              </Col>
-              <Col xs={12} xl={12}>
-                <Card className="page-card-home">
-                  <Row gutter={[32, 22]}>
-                    <Col xs={12} xl={12}>
-                      <WaterfallChart />
-                    </Col>
-                  </Row>
-                </Card>
-              </Col>
-            </Row>
-          </>
+          <div className="cardsColSpace">
+            <Card className="page-card-home">
+              <div classBame="ColDivCard">
+                <div className="rowDiv">
+                  <h3>ID do experimento:</h3>
+                  <span>{responseDetails._id}</span>
+                </div>
+                <div className="rowDiv">
+                  <h3>Pin da sala do experimento:</h3>
+                  <span>{responseDetails.pin}</span>
+                </div>
+                <div className="colDiv">
+                  <h3>Titulo do experimento:</h3>
+                  <span>{responseDetails.title}</span>
+                </div>
+                <div className="colDiv">
+                  <h3>Descrição do experimento:</h3>
+                  <span>{responseDetails.description}</span>
+                </div>
+              </div>
+            </Card>
+            <Card className="page-card-home">
+              <div className="colDiv">
+                <h3>Todos os alunos que participaram:</h3>
+                <div className="divStudetns">
+                  {students.map((student) => (
+                    <div key={student.id} className="divNameAndSeeMore">
+                      <label>Nome: {student.name}</label>
+                      <Button
+                        onClick={() => handleShowResultClick(student._id)}
+                      >
+                        Mostrar resultado
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Card>
+          </div>
         }
       />
+      <Modal
+        open={isModalVisible}
+        onCancel={handleCloseModal}
+        footer={null}
+        width={"50%"}
+      >
+        <Row gutter={[16, 16]}>
+          <Col xs={8} xl={24}>
+            <h3>Gráfico do aluno/a, {findStudentName(selectedStudentId)}</h3>
+            {responseGraphic.data?.expectedValue &&
+            responseGraphic.data?.studentValue ? (
+              <div className="graficosClass">
+                <WaterfallChart
+                  experimentData={responseGraphic.data.expectedValue}
+                  studentData={responseGraphic.data.studentValue}
+                />
+              </div>
+            ) : (
+              <h3>Carregando o gráfico do estudante...</h3>
+            )}
+          </Col>
+        </Row>
+      </Modal>
     </>
   );
 };

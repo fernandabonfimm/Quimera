@@ -117,7 +117,7 @@ module.exports = {
 
     if (!student) {
       return resp.status(404).json({ message: "Student not found." });
-    } 
+    }
 
     const tempo = require("./result_tables/time").default;
     const valor_corrigido = require("./result_tables/correctJsonValue");
@@ -144,6 +144,58 @@ module.exports = {
     };
 
     return resp.json({ data });
+  },
+
+  async getStudentCreatedGraphic(req, res) {
+    const studentId = req.params.idStudent;
+
+    const student = await Student.findById(studentId);
+
+    // if (!student) {
+    //   return res.status(404).json({ message: "Student not found." });
+    // } else if (!student.answerOne || !student.answerTwo) {
+    //   return res.status(404).json({ message: "Student not found answer." });
+    // }
+
+    studentAnswersOne = student.answerOne;
+    studentAnswersTwo = student.answerTwo;
+
+    const tempo = require("./result_tables/time").default;
+    const valor_corrigido = require("./result_tables/correctJsonValue");
+    const valor_corrigido_80 = require("./result_tables/80correctJson");
+    const valor_corrigido_20 = require("./result_tables/20correctJson");
+    const valor_semCorrecao = require("./result_tables/noCorrectJson");
+
+    let answerData;
+
+    if (studentAnswersOne === "Hipotálamo" && studentAnswersTwo === "ADH") {
+      answerData = valor_corrigido;
+    } else if (studentAnswersOne === "Hipotálamo") {
+      answerData = valor_corrigido_80;
+    } else if (studentAnswersTwo === "ADH") {
+      answerData = valor_corrigido_20;
+    } else {
+      answerData = valor_semCorrecao;
+    }
+
+    const data = {
+      time: tempo,
+      studentValue: answerData,
+      expectedValue: valor_corrigido,
+    };
+
+    return res.json({ data });
+  },
+
+  async getGraphicByStudentId(req, resp) {
+    try {
+      const studentId = req.params.id;
+      const data = await getGraphic(studentId);
+      return resp.json({ data });
+    } catch (err) {
+      console.log(err);
+      return resp.status(400).json({ error: "Error fetching data" });
+    }
   },
 
   async getInicialGrahic(req, resp) {
