@@ -10,7 +10,7 @@ import { getStudentByPin } from "../../../../services/routes/api/AuthStudent";
 import { getTotalCorrectGraphic } from "../../../../services/routes/api/Experiment";
 
 const ExperimentDetailsTeacher = () => {
-  const { idValue } = useParams();
+  const { id } = useParams();
   const [responseDetails, setResponseDetails] = React.useState([]);
   const [students, setStudents] = React.useState([]);
   const [pin, setPin] = React.useState();
@@ -31,29 +31,37 @@ const ExperimentDetailsTeacher = () => {
   };
 
   React.useEffect(() => {
-    findExperimentById(teacherId, idValue).then((response) => {
+    findExperimentById(teacherId, id).then((response) => {
       setResponseDetails(response.data.experiment);
       setPin(response.data.experiment.pin);
     });
-    getTotalCorrectGraphic(selectedStudentId).then((response) => {
-      setResponseGraphic(response.data);
-    });
-  }, []);
-
-  React.useEffect(() => {
     const interval = setInterval(() => {
       getStudentByPin(pin)
         .then((response) => {
           setStudents(response.data);
         })
-        .catch((error) => {
-          if (error.response.status === 404) {
-            console.log("Alunos não encontrados para esse pin.");
-          }
+        .catch((err) => {
+          console.log(err);
         });
     }, 1000);
     return () => clearInterval(interval);
-  }, [responseDetails]);
+  }, [students]);
+
+  const getDatasByStudentId = (id) => {
+    getTotalCorrectGraphic(id)
+      .then((response) => {
+        setResponseGraphic(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  React.useEffect(() => {
+    if (selectedStudentId) {
+      getDatasByStudentId(selectedStudentId);
+    }
+  }, [selectedStudentId]);
 
   const findStudentName = (id) => {
     const student = students.find((student) => student._id === id);

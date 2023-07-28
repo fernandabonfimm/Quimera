@@ -68,6 +68,10 @@ const Experiment = () => {
     getInicialGraphic(idStudent).then((response) => {
       setInicialGraphic(response.data);
     });
+    getGraphic(idStudent).then((response) => {
+      setGraphic(response.data);
+    }
+    );
   };
   React.useEffect(() => {
     const interval = setInterval(() => {

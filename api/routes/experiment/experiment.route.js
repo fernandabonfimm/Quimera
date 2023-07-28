@@ -21,12 +21,6 @@ routes.get("/experiments/getOptions", ExperimentController.getOptions);
 
 routes.get("/experiments/getPhaseOne", ExperimentController.getPhaseOne);
 
-
-routes.get(
-  "/experiments/count/:teacherId",
-  ExperimentController.getExperimentAndStudentCounts
-);
-
 routes.get(
   "/experiments/:teacherId",
   ExperimentController.getExperimentsByTeacherId

@@ -25,7 +25,7 @@ const RoutesComponent = () => {
       <Route path="/profile" element={<Profile />} />
       <Route path="/waitingroom/:pin" element={<WaitingRoom />} />
       <Route path="/experimentroom/:idValue/:pinValue" element={<ExperimentRoom />} />
-      <Route path="/experimentdetails/:idValue" element={<ExperimentDetailsTeacher />} />
+      <Route path="/experimentdetails/:id" element={<ExperimentDetailsTeacher />} />
     </Routes>
   );
 };

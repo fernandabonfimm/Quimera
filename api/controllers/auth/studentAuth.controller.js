@@ -4,17 +4,16 @@ const mongoose = require("mongoose");
 
 exports.createStudent = async (req, res) => {
   try {
-    const { name, pin, teacherId } = req.body;
+    const { name, pin } = req.body;
 
-    const experiment = await Experiment.findOne({ pin, teacher: teacherId });
+    const experiment = await Experiment.findOne({ pin });
     if (!experiment) {
-      throw new Error("Invalid PIN or teacher.");
+      throw new Error("Invalid PIN.");
     }
 
     const student = new Student({
       name,
       pin,
-      teacher: teacherId,
       answerOne: null,
       answerTwo: null,
     });
@@ -28,13 +27,12 @@ exports.createStudent = async (req, res) => {
         pin: student.pin,
         answerOne: student.answerOne,
         answerTwo: student.answerTwo,
-        teacher: student.teacher,
       },
     });
   } catch (err) {
     console.error(err);
-    if (err.message === "Invalid PIN or teacher.") {
-      res.status(400).send({ message: "Invalid PIN or teacher." });
+    if (err.message === "Invalid PIN .") {
+      res.status(400).send({ message: "Invalid PIN." });
     } else {
       res.status(500).send({ message: "Error creating student." });
     }
@@ -44,9 +42,15 @@ exports.createStudent = async (req, res) => {
 exports.getStudentByPin = async (req, res) => {
   try {
     const pin = req.params.pin;
-    const students = await Student.find({ pin });
-    if (!students || students.length === 0)
+    if (!pin) {
+      return res.status(400).send({ message: "O campo 'pin' é obrigatório." });
+    }
+
+    const students = await Student.find({ pin: pin });
+    if (!students) {
       throw new Error("Estudante não encontrado.");
+    }
+
     res.send(students);
   } catch (err) {
     console.error(err);
@@ -59,7 +63,6 @@ exports.updateStudentAnswers = async (req, res) => {
     const { answerOne, answerTwo } = req.body;
     const studentId = req.params.id;
 
-    // Check if studentId is a valid ObjectId
     if (!mongoose.Types.ObjectId.isValid(studentId)) {
       return res.status(400).send({ message: "Invalid student ID." });
     }
@@ -82,7 +85,6 @@ exports.updateStudentAnswers = async (req, res) => {
         pin: updatedStudent.pin,
         answerOne: updatedStudent.answerOne,
         answerTwo: updatedStudent.answerTwo,
-        teacher: updatedStudent.teacher,
       },
     });
   } catch (err) {
@@ -97,10 +99,15 @@ exports.updateStudentAnswers = async (req, res) => {
 
 exports.findById = async (id) => {
   try {
+    if (!id) {
+      throw new Error("ID do estudante não pode ser nulo.");
+    }
+
     const student = await Student.findById(id);
     if (!student) {
       throw new Error("Estudante não encontrado.");
     }
+
     return student;
   } catch (err) {
     throw new Error(err.message);

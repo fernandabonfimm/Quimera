@@ -151,11 +151,11 @@ module.exports = {
 
     const student = await Student.findById(studentId);
 
-    // if (!student) {
-    //   return res.status(404).json({ message: "Student not found." });
-    // } else if (!student.answerOne || !student.answerTwo) {
-    //   return res.status(404).json({ message: "Student not found answer." });
-    // }
+    if (!student) {
+      return res.status(404).json({ message: "Student not found." });
+    } else if (!student.answerOne || !student.answerTwo) {
+      return res.status(404).json({ message: "Student not found answer." });
+    }
 
     studentAnswersOne = student.answerOne;
     studentAnswersTwo = student.answerTwo;
@@ -211,25 +211,4 @@ module.exports = {
     return resp.json({ data });
   },
 
-  async getExperimentAndStudentCounts(req, res) {
-    try {
-      const teacherId = req.params.teacherId;
-
-      const experimentCount = await Experiment.countDocuments({
-        teacher: teacherId,
-      });
-
-      const studentsParticipated = await StudentModel.find({
-        teacher: teacherId,
-      }).distinct("pin");
-      const studentCount = studentsParticipated.length;
-
-      res.json({ experimentCount, studentCount });
-    } catch (err) {
-      console.error(err);
-      res
-        .status(500)
-        .json({ error: "Error fetching experiment and student counts" });
-    }
-  },
 };
