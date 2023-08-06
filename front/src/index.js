@@ -5,21 +5,23 @@ import { ConfigProvider } from "antd";
 import { BrowserRouter } from "react-router-dom";
 import RoutesComponent from "./routes/Routes";
 import ErrorBoundary from "./ErrorBoundary";
-import { createRoot } from 'react-dom/client';
+import { createRoot } from "react-dom/client";
+import { ButtonProvider } from "./context/Autorization/Autorização";
 
 const App = () => {
-  return(
+  return (
     <React.StrictMode>
-      <BrowserRouter>
-        <ConfigProvider>
-          <ErrorBoundary>
-            <RoutesComponent />
-          </ErrorBoundary>
-        </ConfigProvider>
-      </BrowserRouter>
-   </React.StrictMode>
+      <ButtonProvider>
+        <BrowserRouter>
+          <ConfigProvider>
+            <ErrorBoundary>
+              <RoutesComponent />
+            </ErrorBoundary>
+          </ConfigProvider>
+        </BrowserRouter>
+      </ButtonProvider>
+    </React.StrictMode>
   );
 };
 
 createRoot(document.getElementById("root")).render(<App />);
-

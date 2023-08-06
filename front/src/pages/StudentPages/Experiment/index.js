@@ -7,7 +7,6 @@ import "./styles.css";
 import { useParams } from "react-router-dom";
 import CardChecked from "../../../components/CardChecked";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
 import {
   getOptions,
   getPhaseOne,
@@ -16,9 +15,11 @@ import {
   getInicialGraphic,
 } from "../../../services/routes/api/Experiment";
 import { postAnswer } from "../../../services/routes/api/AuthStudent";
+import { ButtonContext } from "context/Autorization/Autorização";
 
 const Experiment = () => {
   const { pin } = useParams();
+  const { buttonClicked } = React.useContext(ButtonContext);
   const idStudent = localStorage.getItem("idStudent");
   const storedName = localStorage.getItem("name");
   const [showB1, setShowB1] = React.useState(false);
@@ -60,7 +61,6 @@ const Experiment = () => {
   };
 
   const [isButtonDisabled, setIsButtonDisabled] = React.useState(true);
-  const [isResultVisible, setIsResultVisible] = React.useState(false);
   const [answerOneStorage, setAnswerOneStorage] = React.useState("");
   const [answerTwoStorage, setAnswerTwoStorage] = React.useState("");
 
@@ -82,7 +82,6 @@ const Experiment = () => {
 
   const handleButtonDisabled = () => {
     setIsButtonDisabled(false);
-    setIsResultVisible(false);
     const answerOneString = Object.keys(selectedOptionsB1)[0].toString();
     const answerTwoString = Object.keys(selectedOptionsB2)[0].toString();
     const answerOne = options.optionsOne.find(
@@ -108,8 +107,7 @@ const Experiment = () => {
       getDatas();
     });
 
-    setIsButtonDisabled(true);
-    setIsResultVisible(true);
+    setIsButtonDisabled(buttonClicked);
   };
 
   const [selectedOptionsB1, setSelectedOptionsB1] = React.useState({});
@@ -167,7 +165,7 @@ const Experiment = () => {
               <div className="contentB1-Choices">
                 {!showB1 && (
                   <div className="content-ButtonAndLabel">
-                    {!isResultVisible && (
+                    {!buttonClicked && (
                       <button
                         onClick={() => setShowB1(true)}
                         className="button-Experiment"
@@ -182,7 +180,7 @@ const Experiment = () => {
                 )}
                 {showB1 && (
                   <>
-                    {!isResultVisible && (
+                    {!buttonClicked && (
                       <button
                         onClick={() => setShowB1(false)}
                         className="button-Experiment"
@@ -208,7 +206,7 @@ const Experiment = () => {
               <div className="contentB1-Choices">
                 {!showB2 && (
                   <div className="content-ButtonAndLabel">
-                    {!isResultVisible && (
+                    {!buttonClicked && (
                       <button
                         onClick={() => setShowB2(true)}
                         className="button-Experiment"
@@ -223,7 +221,7 @@ const Experiment = () => {
                 )}
                 {showB2 && (
                   <>
-                    {!isResultVisible && (
+                    {!buttonClicked && (
                       <button
                         onClick={() => setShowB2(false)}
                         className="button-Experiment"
@@ -281,7 +279,7 @@ const Experiment = () => {
               </div>
             )}
             <div className="contentChart-cardExperiment">
-              {isResultVisible ? (
+              {buttonClicked ? (
                 <>
                   {graphic?.data?.expectedValue &&
                   graphic?.data?.studentValue ? (

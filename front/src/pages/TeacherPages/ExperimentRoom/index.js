@@ -7,8 +7,11 @@ import { getStudentByPin } from "../../../services/routes/api/AuthStudent";
 import { findExperimentById } from "../../../services/routes/api/Experiment";
 import { HiOutlineArrowLeft } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
+import { ButtonContext } from "context/Autorization/Autorização";
+import Swal from "sweetalert2";
 
 export default function ExperimentRoom() {
+  const { buttonClicked, handleButtonClick } = React.useContext(ButtonContext);
   const navigate = useNavigate();
   const { idValue, pinValue } = useParams();
   const [students, setStudents] = React.useState([]);
@@ -36,6 +39,15 @@ export default function ExperimentRoom() {
     }, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  const showSuccessAlert = () => {
+    Swal.fire({
+      title: "Botão clicado!",
+      text: "Parabéns, você clicou no botão!",
+      icon: "success",
+      confirmButtonText: "Fechar",
+    });
+  };
 
   return (
     <BaseAuth>
@@ -66,6 +78,20 @@ export default function ExperimentRoom() {
                 <label>{student.name}</label>
               </div>
             ))}
+          </div>
+          <div className="divpinsala marginBottom">
+            <Button
+              className="button-login"
+              onClick={() => {
+                handleButtonClick();
+                if (buttonClicked) {
+                  showSuccessAlert();
+                }
+              }}
+              disabled={buttonClicked}
+            >
+              {buttonClicked ? "Resultado liberado" : "Liberar Resultado"}
+            </Button>
           </div>
         </Card>
       </div>
