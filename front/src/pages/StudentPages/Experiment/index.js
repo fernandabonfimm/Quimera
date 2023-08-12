@@ -15,11 +15,11 @@ import {
   getInicialGraphic,
 } from "../../../services/routes/api/Experiment";
 import { postAnswer } from "../../../services/routes/api/AuthStudent";
-import { ButtonContext } from "context/Autorization/Autorização";
 
 const Experiment = () => {
   const { pin } = useParams();
-  const { buttonClicked } = React.useContext(ButtonContext);
+  const buttonClicked = localStorage.getItem("buttonClicked");
+  console.log("tela do usuario botao estado", buttonClicked);
   const idStudent = localStorage.getItem("idStudent");
   const storedName = localStorage.getItem("name");
   const [showB1, setShowB1] = React.useState(false);
@@ -32,6 +32,7 @@ const Experiment = () => {
   const [graphic, setGraphic] = React.useState({});
   const [inicialGraphic, setInicialGraphic] = React.useState({});
   const [experimentData, setExperimentData] = React.useState([]);
+  console.log("tela do usuario botao estado", buttonClicked);
 
   React.useEffect(() => {
     console.log(experimentData.title);
@@ -70,8 +71,7 @@ const Experiment = () => {
     });
     getGraphic(idStudent).then((response) => {
       setGraphic(response.data);
-    }
-    );
+    });
   };
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -81,7 +81,6 @@ const Experiment = () => {
   }, []);
 
   const handleButtonDisabled = () => {
-    setIsButtonDisabled(false);
     const answerOneString = Object.keys(selectedOptionsB1)[0].toString();
     const answerTwoString = Object.keys(selectedOptionsB2)[0].toString();
     const answerOne = options.optionsOne.find(
@@ -105,9 +104,8 @@ const Experiment = () => {
         timer: 1500,
       });
       getDatas();
+      setIsButtonDisabled(true);
     });
-
-    setIsButtonDisabled(buttonClicked);
   };
 
   const [selectedOptionsB1, setSelectedOptionsB1] = React.useState({});
@@ -250,7 +248,7 @@ const Experiment = () => {
                   disabled={isButtonDisabled}
                   onClick={handleButtonDisabled}
                 >
-                  Realizar experimento
+                  {buttonClicked ? "Experimento realizado" : "Realizar Experimento"}
                 </button>
               </div>
             </div>

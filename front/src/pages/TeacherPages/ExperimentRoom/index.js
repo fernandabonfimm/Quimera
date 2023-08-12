@@ -11,7 +11,8 @@ import { ButtonContext } from "context/Autorization/Autorização";
 import Swal from "sweetalert2";
 
 export default function ExperimentRoom() {
-  const { buttonClicked, handleButtonClick } = React.useContext(ButtonContext);
+  const { handleButtonClick } = React.useContext(ButtonContext);
+  const buttonClicked = localStorage.getItem("buttonClicked");
   const navigate = useNavigate();
   const { idValue, pinValue } = useParams();
   const [students, setStudents] = React.useState([]);
@@ -42,12 +43,25 @@ export default function ExperimentRoom() {
 
   const showSuccessAlert = () => {
     Swal.fire({
-      title: "Botão clicado!",
-      text: "Parabéns, você clicou no botão!",
-      icon: "success",
-      confirmButtonText: "Fechar",
+      icon: "Warning",
+      title: "Tem certeza?",
+      text: "Tem certeza que deseja liberar o resultado aos alunos?",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sim, liberar!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          icon: "success",
+          title: "Resultado liberado com sucesso!",
+        });
+        handleButtonClick();
+      }
     });
   };
+
+  console.log("tela do professor botao estado", buttonClicked);
 
   return (
     <BaseAuth>
@@ -82,12 +96,7 @@ export default function ExperimentRoom() {
           <div className="divpinsala marginBottom">
             <Button
               className="button-login"
-              onClick={() => {
-                handleButtonClick();
-                if (buttonClicked) {
-                  showSuccessAlert();
-                }
-              }}
+              onClick={showSuccessAlert}
               disabled={buttonClicked}
             >
               {buttonClicked ? "Resultado liberado" : "Liberar Resultado"}
