@@ -1,21 +1,27 @@
 import React from "react";
 import Base from "../../../components/BaseLayout";
 import { MdOutlineDashboard } from "react-icons/md";
-import { Table, Button, Card } from "antd";
+import { Table, Button, Card, Input, Space, DatePicker } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import {
   findExperiments,
   deleteExperiment,
 } from "../../../services/routes/api/Experiment";
-import { BsTrash, BsEye, BsFileEarmarkExcel } from "react-icons/bs";
+import { BsTrash, BsEye } from "react-icons/bs";
 import Swal from "sweetalert2";
 import "./styles.css";
 import { useNavigate } from "react-router-dom";
-import PieChartComponent from "components/PieChart";
+import { formatDate } from "utils/formats";
+import moment from "moment";
 
 const Home = () => {
   const navigate = useNavigate();
   const response = JSON.parse(localStorage.getItem("responseUser"));
   const [experiments, setExperiments] = React.useState([]);
+  const [selectedDate, setSelectedDate] = React.useState(null);
+  const [searchText, setSearchText] = React.useState("");
+  const [filteredExperiments, setFilteredExperiments] = React.useState([]);
+
   const idTeacher = localStorage.getItem("_idTeacher");
 
   const fetchExperiments = React.useCallback(async () => {
@@ -77,6 +83,12 @@ const Home = () => {
       key: "title",
     },
     {
+      title: "Data de criação",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (createdAt) => formatDate(createdAt),
+    },
+    {
       title: "Ações",
       dataIndex: "actions",
       key: "actions",
@@ -100,11 +112,29 @@ const Home = () => {
     },
   ];
 
-  const data = [
-    { name: "Experiments", value: 10 },
-    { name: "Students", value: 50 },
-  ];
+  const handleSearch = () => {
+    const filteredByTitle = experiments.filter((experiment) =>
+      experiment.title.toLowerCase().includes(searchText.toLowerCase())
+    );
 
+    const filteredByDateAndTitle = selectedDate
+      ? filteredByTitle.filter((experiment) => {
+          const createdAtDate = moment(experiment.createdAt);
+          return createdAtDate.isSame(selectedDate, "day");
+        })
+      : filteredByTitle;
+
+    setFilteredExperiments(filteredByDateAndTitle);
+  };
+
+  React.useEffect(() => {
+    fetchExperiments();
+    handleSearch();
+  }, [fetchExperiments, selectedDate, searchText]);
+
+  const atualDateinPortuguese = new Date().toLocaleDateString("pt-BR", {
+    timeZone: "UTC",
+  });
   return (
     <>
       <Base
@@ -115,29 +145,38 @@ const Home = () => {
         nameofuser={response?.name}
         children={
           <div className="CardsDiv">
-            <Card className="page-card-home bigger">
+            <Card className="page-card-home">
               <div>
                 <h3 className="title-card-home">
                   Tabela de todos os experimentos
                 </h3>
               </div>
+              <div className="divInputsSearch">
+                <Input
+                  placeholder="Pesquisar"
+                  className="inputSearch"
+                  prefix={<SearchOutlined className="iconSearch" />}
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  onPressEnter={() => handleSearch()}
+                />
+                <DatePicker
+                  placeholder={atualDateinPortuguese}
+                  className="inputSearch"
+                  onChange={(date) => {
+                    setSelectedDate(date);
+                    handleSearch();
+                  }}
+                />
+              </div>
               <div className="table-home">
                 <Table
                   columns={columns}
-                  dataSource={experiments}
+                  dataSource={filteredExperiments}
                   rowKey="_id"
                   style={{ width: "100%" }}
                 />
               </div>
-            </Card>
-            <Card className="page-card-home small">
-              <div>
-                <h3 className="title-card-home">
-                  Gráfico da quantidade de todos os experimentos
-                  realizados e alunos que participaram
-                </h3>
-              </div>
-              <PieChartComponent data={data} />
             </Card>
           </div>
         }

@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import { findExperimentById } from "../../../../services/routes/api/Experiment";
 import { getStudentByPin } from "../../../../services/routes/api/AuthStudent";
 import { getTotalCorrectGraphic } from "../../../../services/routes/api/Experiment";
+import { formatDate } from "utils/formats";
 
 const ExperimentDetailsTeacher = () => {
   const { id } = useParams();
@@ -83,6 +84,10 @@ const ExperimentDetailsTeacher = () => {
                 <div className="rowDiv">
                   <h3>ID do experimento:</h3>
                   <span>{responseDetails._id}</span>
+                </div>
+                <div className="rowDiv">
+                  <h3>Dia e hora do experimento:</h3>
+                  <span>{formatDate(responseDetails.createdAt)}</span>
                 </div>
                 <div className="rowDiv">
                   <h3>Pin da sala do experimento:</h3>
