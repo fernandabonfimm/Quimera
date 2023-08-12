@@ -132,6 +132,7 @@ const ExperimentDetailsTeacher = () => {
         <Row gutter={[16, 16]}>
           <Col xs={8} xl={24}>
             <h3>Gráfico do aluno/a, {findStudentName(selectedStudentId)}</h3>
+            <span>Nota do Aluno: <b>{responseGraphic.data?.nota} pontos</b></span>
             {responseGraphic.data?.expectedValue &&
             responseGraphic.data?.studentValue ? (
               <div className="graficosClass">

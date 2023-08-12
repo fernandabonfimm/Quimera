@@ -178,10 +178,22 @@ module.exports = {
       answerData = valor_semCorrecao;
     }
 
+    let notaDoAluno = 0;
+    if (studentAnswersOne === "Hipotálamo" && studentAnswersTwo === "ADH") {
+      notaDoAluno = 10;
+    } else if (studentAnswersOne === "Hipotálamo") {
+      notaDoAluno = 8;
+    } else if (studentAnswersTwo === "ADH") {
+      notaDoAluno = 2;
+    } else {
+      notaDoAluno = 0;
+    }
+
     const data = {
       time: tempo,
       studentValue: answerData,
       expectedValue: valor_corrigido,
+      nota: notaDoAluno,
     };
 
     return res.json({ data });
@@ -210,5 +222,4 @@ module.exports = {
 
     return resp.json({ data });
   },
-
 };
