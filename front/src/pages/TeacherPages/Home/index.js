@@ -113,6 +113,11 @@ const Home = () => {
   ];
 
   const handleSearch = () => {
+    if (!searchText && !selectedDate) {
+      setFilteredExperiments(experiments);
+      return;
+    }
+
     const filteredByTitle = experiments.filter((experiment) =>
       experiment.title.toLowerCase().includes(searchText.toLowerCase())
     );
