@@ -135,7 +135,7 @@ const Home = () => {
   React.useEffect(() => {
     fetchExperiments();
     handleSearch();
-  }, [fetchExperiments, selectedDate, searchText]);
+  }, [fetchExperiments, handleSearch]);
 
   const atualDateinPortuguese = new Date().toLocaleDateString("pt-BR", {
     timeZone: "UTC",

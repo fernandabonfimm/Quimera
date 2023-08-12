@@ -74,8 +74,6 @@ export default function ExperimentRoom() {
     });
   };
 
-  console.log("tela do professor botao estado", buttonClicked);
-
   return (
     <BaseAuth>
       <div className="colDivContent">

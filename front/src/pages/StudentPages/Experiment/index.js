@@ -143,7 +143,7 @@ const Experiment = () => {
       goTo={"/dashboard"}
       Icon={<MdOutlineBiotech />}
       goToName={"Experimento"}
-      titlepage={`a sala de experimento: ${pin}`}
+      titlepage={`a sala de experimento: ${pin}, `}
       nameofuser={storedName}
       children={
         <div className="divCol">
