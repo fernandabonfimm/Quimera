@@ -59,6 +59,12 @@ const Register = () => {
     localStorage.setItem("userType", "teacher");
     localStorage.setItem("isTeacher", true);
     localStorage.setItem("isStudent", false);
+    setTimeout(() => {
+      localStorage.removeItem("name");
+      localStorage.removeItem("userType");
+      localStorage.removeItem("isTeacher");
+      localStorage.removeItem("isStudent");
+    }, 24 * 60 * 60 * 1000);
     try {
       await registerTeacher(name, email, password).then((response) => {
         setResponseUser(response.data);

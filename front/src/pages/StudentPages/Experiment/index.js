@@ -19,7 +19,7 @@ import { postAnswer } from "../../../services/routes/api/AuthStudent";
 const Experiment = () => {
   const { pin } = useParams();
   const buttonClicked = localStorage.getItem("buttonClicked");
-  console.log("tela do usuario botao estado", buttonClicked);
+
   const idStudent = localStorage.getItem("idStudent");
   const storedName = localStorage.getItem("name");
   const [showB1, setShowB1] = React.useState(false);
@@ -248,7 +248,9 @@ const Experiment = () => {
                   disabled={isButtonDisabled}
                   onClick={handleButtonDisabled}
                 >
-                  {buttonClicked ? "Experimento realizado" : "Realizar Experimento"}
+                  {buttonClicked
+                    ? "Experimento realizado"
+                    : "Realizar Experimento"}
                 </button>
               </div>
             </div>
@@ -277,30 +279,22 @@ const Experiment = () => {
               </div>
             )}
             <div className="contentChart-cardExperiment">
-              {buttonClicked ? (
-                <>
-                  {graphic?.data?.expectedValue &&
-                  graphic?.data?.studentValue ? (
-                    <WaterfallChart
-                      experimentData={graphic?.data.expectedValue}
-                      studentData={graphic?.data.studentValue}
-                    />
-                  ) : (
-                    <h3>Carregando gráfico...</h3>
-                  )}
-                </>
+              {(buttonClicked && graphic?.data?.expectedValue) ||
+              (!buttonClicked && inicialGraphic?.data?.expectedValue) ? (
+                <WaterfallChart
+                  experimentData={
+                    buttonClicked
+                      ? graphic?.data.expectedValue
+                      : inicialGraphic?.data.expectedValue
+                  }
+                  studentData={
+                    buttonClicked
+                      ? graphic?.data.studentValue
+                      : inicialGraphic?.data.studentValue
+                  }
+                />
               ) : (
-                <>
-                  {inicialGraphic?.data?.expectedValue &&
-                  inicialGraphic?.data?.studentValue ? (
-                    <WaterfallChart
-                      experimentData={inicialGraphic?.data.expectedValue}
-                      studentData={inicialGraphic?.data.studentValue}
-                    />
-                  ) : (
-                    <h3>Carregando o gráfico inicial...</h3>
-                  )}
-                </>
+                <h3>Carregando gráfico...</h3>
               )}
             </div>
           </Card>

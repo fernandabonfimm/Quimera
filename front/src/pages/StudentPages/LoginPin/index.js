@@ -40,6 +40,14 @@ export default function LoginPin() {
       localStorage.setItem("isTeacher", false);
       localStorage.setItem("isStudent", true);
       localStorage.setItem("userType", "student");
+      setTimeout(() => {
+        localStorage.removeItem("name");
+        localStorage.removeItem("pin");
+        localStorage.removeItem("isTeacher");
+        localStorage.removeItem("isStudent");
+        localStorage.removeItem("userType");
+        localStorage.removeItem("idStudent");
+      }, 24 * 60 * 60 * 1000);
       const body = {
         name: name,
         pin: pin,

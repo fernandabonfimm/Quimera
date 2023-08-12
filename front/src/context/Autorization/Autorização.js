@@ -8,11 +8,12 @@ const ButtonProvider = ({ children }) => {
   const handleButtonClick = () => {
     setButtonClicked(true);
     localStorage.setItem("buttonClicked", true);
-  };
 
-  setTimeout(() => {
-    localStorage.removeItem("buttonClicked");
-  }, 36000000);
+    setTimeout(() => {
+      setButtonClicked(false);
+      localStorage.removeItem("buttonClicked");
+    }, 30 * 60 * 1000);
+  };
 
   return (
     <ButtonContext.Provider value={{ buttonClicked, handleButtonClick }}>
