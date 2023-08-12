@@ -151,10 +151,22 @@ module.exports = {
       answerData = valor_semCorrecao;
     }
 
+    let notaDoAluno = 0;
+    if (student.answerOne === "Hipotálamo" && student.answerTwo === "ADH") {
+      notaDoAluno = 10;
+    } else if (student.answerOne === "Hipotálamo") {
+      notaDoAluno = 8;
+    } else if (student.answerTwo === "ADH") {
+      notaDoAluno = 2;
+    } else {
+      notaDoAluno = 0;
+    }
+
     const data = {
       time: tempo,
       studentValue: answerData,
       expectedValue: valor_corrigido,
+      nota: notaDoAluno,
     };
 
     return resp.json({ data });

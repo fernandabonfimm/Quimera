@@ -19,7 +19,20 @@ export default function ExperimentRoom() {
   const [responseExperiment, setResponseExperiment] = React.useState([]);
 
   const handleGoBack = () => {
-    navigate("/dashboard");
+    Swal.fire({
+      icon: "warning",
+      title: "Tem certeza?",
+      text: "Tem certeza que deseja sair da sala?",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sim, sair!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate("/dashboard");
+        localStorage.removeItem("buttonClicked");
+      }
+    });
   };
 
   const teacherId = localStorage.getItem("_idTeacher");

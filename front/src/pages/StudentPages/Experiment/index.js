@@ -32,7 +32,6 @@ const Experiment = () => {
   const [graphic, setGraphic] = React.useState({});
   const [inicialGraphic, setInicialGraphic] = React.useState({});
   const [experimentData, setExperimentData] = React.useState([]);
-  console.log("tela do usuario botao estado", buttonClicked);
 
   React.useEffect(() => {
     console.log(experimentData.title);
@@ -147,157 +146,169 @@ const Experiment = () => {
       titlepage={`a sala de experimento: ${pin}`}
       nameofuser={storedName}
       children={
-        <div className="divCards">
-          <Card className="card-chartsExperiment">
-            <h3 className="title-cardExperiment">
-              Título: {experimentData.title}
-            </h3>
-            <span className="description-cardExperiment">
-              Descrição: {experimentData.description}
-            </span>
-            <br />
-            <p className="subtitle-cardExperiment">
-              Informe a OP1 e OP2 (Opções) para realizar o experimento
-            </p>
-            <div className="contentChoices-cardExperiment">
-              <div className="contentB1-Choices">
-                {!showB1 && (
-                  <div className="content-ButtonAndLabel">
-                    {!buttonClicked && (
-                      <button
-                        onClick={() => setShowB1(true)}
-                        className="button-Experiment"
-                      >
-                        OP1
-                      </button>
-                    )}
-                    <label>
-                      Escolha: <b>{getSelectedLabelB1()}</b>
-                    </label>
-                  </div>
-                )}
-                {showB1 && (
-                  <>
-                    {!buttonClicked && (
-                      <button
-                        onClick={() => setShowB1(false)}
-                        className="button-Experiment"
-                      >
-                        OP1
-                      </button>
-                    )}
-                    <div className="min-height-answer">
-                      {options.optionsOne.map((item, index) => (
-                        <div key={index}>
-                          <CardChecked
-                            handleClick={() => handleSelectOptionB1(item)}
-                            isClicked={selectedOptionsB1[item.value]}
-                          >
-                            {item.label}
-                          </CardChecked>
-                        </div>
-                      ))}
+        <div className="divCol">
+          {buttonClicked && (
+            <Card className="notaCard">
+              <h3 className="titleNotaCard">
+                SUA NOTA FOI: <b className="pontosNotaCard">{graphic?.data?.nota} PONTOS</b>
+              </h3>
+            </Card>
+          )}
+          <div className="divCards">
+            <Card className="card-chartsExperiment">
+              <h3 className="title-cardExperiment">
+                Título: {experimentData.title}
+              </h3>
+              <span className="description-cardExperiment">
+                Descrição: {experimentData.description}
+              </span>
+              <br />
+              <p className="subtitle-cardExperiment">
+                Informe a OP1 e OP2 (Opções) para realizar o experimento
+              </p>
+              <div className="contentChoices-cardExperiment">
+                <div className="contentB1-Choices">
+                  {!showB1 && (
+                    <div className="content-ButtonAndLabel">
+                      {!buttonClicked && (
+                        <button
+                          onClick={() => setShowB1(true)}
+                          className="button-Experiment"
+                        >
+                          OP1
+                        </button>
+                      )}
+                      <label>
+                        Escolha: <b>{getSelectedLabelB1()}</b>
+                      </label>
                     </div>
-                  </>
-                )}
-              </div>
-              <div className="contentB1-Choices">
-                {!showB2 && (
-                  <div className="content-ButtonAndLabel">
-                    {!buttonClicked && (
-                      <button
-                        onClick={() => setShowB2(true)}
-                        className="button-Experiment"
-                      >
-                        OP2
-                      </button>
-                    )}
-                    <label>
-                      Escolha: <b>{getSelectedLabelB2()}</b>
-                    </label>
-                  </div>
-                )}
-                {showB2 && (
-                  <>
-                    {!buttonClicked && (
-                      <button
-                        onClick={() => setShowB2(false)}
-                        className="button-Experiment"
-                      >
-                        OP2
-                      </button>
-                    )}
-                    <div className="min-height-answer">
-                      {options.optionsTwo.map((item, index) => (
-                        <div key={index}>
-                          <CardChecked
-                            handleClick={() => handleSelectOptionB2(item)}
-                            isClicked={selectedOptionsB2[item.value]}
-                          >
-                            {item.label}
-                          </CardChecked>
-                        </div>
-                      ))}
+                  )}
+                  {showB1 && (
+                    <>
+                      {!buttonClicked && (
+                        <button
+                          onClick={() => setShowB1(false)}
+                          className="button-Experiment"
+                        >
+                          OP1
+                        </button>
+                      )}
+                      <div className="min-height-answer">
+                        {options.optionsOne.map((item, index) => (
+                          <div key={index}>
+                            <CardChecked
+                              handleClick={() => handleSelectOptionB1(item)}
+                              isClicked={selectedOptionsB1[item.value]}
+                            >
+                              {item.label}
+                            </CardChecked>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+                <div className="contentB1-Choices">
+                  {!showB2 && (
+                    <div className="content-ButtonAndLabel">
+                      {!buttonClicked && (
+                        <button
+                          onClick={() => setShowB2(true)}
+                          className="button-Experiment"
+                        >
+                          OP2
+                        </button>
+                      )}
+                      <label>
+                        Escolha: <b>{getSelectedLabelB2()}</b>
+                      </label>
                     </div>
-                  </>
-                )}
+                  )}
+                  {showB2 && (
+                    <>
+                      {!buttonClicked && (
+                        <button
+                          onClick={() => setShowB2(false)}
+                          className="button-Experiment"
+                        >
+                          OP2
+                        </button>
+                      )}
+                      <div className="min-height-answer">
+                        {options.optionsTwo.map((item, index) => (
+                          <div key={index}>
+                            <CardChecked
+                              handleClick={() => handleSelectOptionB2(item)}
+                              isClicked={selectedOptionsB2[item.value]}
+                            >
+                              {item.label}
+                            </CardChecked>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+                <div className="contentB1-Choices">
+                  <button
+                    className="btnRealizarExperimento"
+                    disabled={isButtonDisabled}
+                    onClick={handleButtonDisabled}
+                  >
+                    {buttonClicked
+                      ? "Experimento realizado"
+                      : "Realizar Experimento"}
+                  </button>
+                </div>
               </div>
-              <div className="contentB1-Choices">
-                <button
-                  className="btnRealizarExperimento"
-                  disabled={isButtonDisabled}
-                  onClick={handleButtonDisabled}
-                >
-                  {buttonClicked
-                    ? "Experimento realizado"
-                    : "Realizar Experimento"}
-                </button>
-              </div>
-            </div>
-          </Card>
-          <Card className="card-chartsExperiment">
-            {answerOneStorage === "Hipotálamo" && answerTwoStorage === "ADH" ? (
-              <div>
-                <h3>
-                  Você acertou as duas respostas, {answerOneStorage} 80% e{" "}
-                  {answerTwoStorage} 20%
-                </h3>
-              </div>
-            ) : answerOneStorage === "Hipotálamo" ? (
-              <div>
-                <h3>
-                  Você acertou a primeira resposta, {answerOneStorage} 80%
-                </h3>
-              </div>
-            ) : answerTwoStorage === "ADH" ? (
-              <div>
-                <h3>Você acertou a segunda resposta, {answerTwoStorage} 20%</h3>
-              </div>
-            ) : (
-              <div>
-                <h3>Você ainda não acertou nenhuma resposta</h3>
-              </div>
-            )}
-            <div className="contentChart-cardExperiment">
-              {(buttonClicked && graphic?.data?.expectedValue) ||
-              (!buttonClicked && inicialGraphic?.data?.expectedValue) ? (
-                <WaterfallChart
-                  experimentData={
-                    buttonClicked
-                      ? graphic?.data.expectedValue
-                      : inicialGraphic?.data.expectedValue
-                  }
-                  studentData={
-                    buttonClicked
-                      ? graphic?.data.studentValue
-                      : inicialGraphic?.data.studentValue
-                  }
-                />
+            </Card>
+            <Card className="card-chartsExperiment">
+              {answerOneStorage === "Hipotálamo" &&
+              answerTwoStorage === "ADH" ? (
+                <div>
+                  <h3>
+                    Você acertou as duas respostas, {answerOneStorage} 80% e{" "}
+                    {answerTwoStorage} 20%
+                  </h3>
+                </div>
+              ) : answerOneStorage === "Hipotálamo" ? (
+                <div>
+                  <h3>
+                    Você acertou a primeira resposta, {answerOneStorage} 80%
+                  </h3>
+                </div>
+              ) : answerTwoStorage === "ADH" ? (
+                <div>
+                  <h3>
+                    Você acertou a segunda resposta, {answerTwoStorage} 20%
+                  </h3>
+                </div>
               ) : (
-                <h3>Carregando gráfico...</h3>
+                <div>
+                  <h3>Você ainda não acertou nenhuma resposta</h3>
+                </div>
               )}
-            </div>
-          </Card>
+              <div className="contentChart-cardExperiment">
+                {(buttonClicked && graphic?.data?.expectedValue) ||
+                (!buttonClicked && inicialGraphic?.data?.expectedValue) ? (
+                  <WaterfallChart
+                    experimentData={
+                      buttonClicked
+                        ? graphic?.data.expectedValue
+                        : inicialGraphic?.data.expectedValue
+                    }
+                    studentData={
+                      buttonClicked
+                        ? graphic?.data.studentValue
+                        : inicialGraphic?.data.studentValue
+                    }
+                  />
+                ) : (
+                  <h3>Carregando gráfico...</h3>
+                )}
+              </div>
+            </Card>
+          </div>
         </div>
       }
     />

@@ -28,8 +28,16 @@ export default function WaterfallChart({ experimentData, studentData }) {
   return (
     <LineChart width={600} height={300} data={data}>
       <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="index" label={{ value: "Tempo", position: 'insideBottom', offset: -5 }}/>
-      <YAxis domain={[-5, 105]} allowDataOverflow={true} label={{ value: "Intensidade", angle: -90, position: 'insideLeft' }}/>
+      <XAxis
+        dataKey="index"
+        label={{ value: "Tempo", position: "insideBottom", offset: -5 }}
+      />
+      <YAxis
+        domain={[-5, 105]}
+        allowDataOverflow={true}
+        label={{ value: "Intensidade", angle: -90, position: "insideLeft" }}
+        tick={false}
+      />
       <Tooltip />
       <Legend />
       <Line type="monotone" dataKey="Experimento" stroke="#8884d8" />
