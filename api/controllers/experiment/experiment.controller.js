@@ -98,12 +98,26 @@ module.exports = {
   },
 
   async getOptions(req, res) {
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
     try {
       const options = require("./options");
 
       const [optionsOne, optionsTwo] = options;
 
-      res.json({ optionsOne, optionsTwo });
+      const shuffledOptionsOne = shuffleArray([...optionsOne]);
+      const shuffledOptionsTwo = shuffleArray([...optionsTwo]);
+
+      res.json({
+        optionsOne: shuffledOptionsOne,
+        optionsTwo: shuffledOptionsTwo,
+      });
     } catch (err) {
       console.log(err);
       return res.status(400).json({ error: "Error fetching options" });
