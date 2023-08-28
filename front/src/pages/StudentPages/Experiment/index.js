@@ -150,7 +150,8 @@ const Experiment = () => {
           {buttonClicked && (
             <Card className="notaCard">
               <h3 className="titleNotaCard">
-                SUA NOTA FOI: <b className="pontosNotaCard">{graphic?.data?.nota} PONTOS</b>
+                SUA NOTA FOI:{" "}
+                <b className="pontosNotaCard">{graphic?.data?.nota} PONTOS</b>
               </h3>
             </Card>
           )}
@@ -263,30 +264,39 @@ const Experiment = () => {
               </div>
             </Card>
             <Card className="card-chartsExperiment">
-              {answerOneStorage === "Hipotálamo" &&
-              answerTwoStorage === "ADH" ? (
-                <div>
-                  <h3>
-                    Você acertou as duas respostas, {answerOneStorage} 80% e{" "}
-                    {answerTwoStorage} 20%
-                  </h3>
-                </div>
-              ) : answerOneStorage === "Hipotálamo" ? (
-                <div>
-                  <h3>
-                    Você acertou a primeira resposta, {answerOneStorage} 80%
-                  </h3>
-                </div>
-              ) : answerTwoStorage === "ADH" ? (
-                <div>
-                  <h3>
-                    Você acertou a segunda resposta, {answerTwoStorage} 20%
-                  </h3>
-                </div>
-              ) : (
-                <div>
-                  <h3>Você ainda não acertou nenhuma resposta</h3>
-                </div>
+              {buttonClicked && (
+                <>
+                  {answerOneStorage === "Hipotálamo" &&
+                  answerTwoStorage === "ADH" ? (
+                    <div>
+                      <h3>
+                        Você acertou as duas respostas, {answerOneStorage} 80% e{" "}
+                        {answerTwoStorage} 20%
+                      </h3>
+                    </div>
+                  ) : answerOneStorage === "Hipotálamo" ? (
+                    <div>
+                      <h3>
+                        Você acertou a primeira resposta, {answerOneStorage} 80%
+                      </h3>
+                    </div>
+                  ) : answerTwoStorage === "ADH" ? (
+                    <div>
+                      <h3>
+                        Você acertou a segunda resposta, {answerTwoStorage} 20%
+                      </h3>
+                    </div>
+                  ) : (
+                    <div>
+                      <h3>Você ainda não acertou nenhuma resposta</h3>
+                    </div>
+                  )}
+                </>
+              )}
+              {!buttonClicked && (
+                <>
+                  <h3>Aguardando o resultado ser liberada pelo professor</h3>
+                </>
               )}
               <div className="contentChart-cardExperiment">
                 {(buttonClicked && graphic?.data?.expectedValue) ||

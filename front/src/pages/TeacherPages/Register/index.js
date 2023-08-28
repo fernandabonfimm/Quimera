@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import BaseAuth from "../../../components/BaseAuth";
 import { Link, useNavigate } from "react-router-dom";
-import { Card, Input, message } from "antd";
+import { Card, Input } from "antd";
 import LogoHA from "../../../logoHA.png";
 import { RiUserHeartLine } from "react-icons/ri";
 import "./styles.css";
@@ -54,27 +54,15 @@ const Register = () => {
       });
       return;
     }
-
-    localStorage.setItem("name", name);
-    localStorage.setItem("userType", "teacher");
-    localStorage.setItem("isTeacher", true);
-    localStorage.setItem("isStudent", false);
-    setTimeout(() => {
-      localStorage.removeItem("name");
-      localStorage.removeItem("userType");
-      localStorage.removeItem("isTeacher");
-      localStorage.removeItem("isStudent");
-    }, 24 * 60 * 60 * 1000);
     try {
       await registerTeacher(name, email, password).then((response) => {
         setResponseUser(response.data);
-        localStorage.setItem("responseUser", JSON.stringify(response.data));
       });
       Swal.fire({
         icon: "success",
-        title: "Login realizado com sucesso!",
+        title: "Registro criado com sucesso! faça o login agora.",
       });
-      navigate("/dashboard");
+      navigate("/loginTeacher");
     } catch (error) {
       console.error("Error logging in teacher:", error);
       Swal.fire({
