@@ -18,6 +18,12 @@ const ExperimentSchema = new mongoose.Schema({
     ref: 'Teacher',
     required: true,
   },
+  // O atributo liberateRoom é utilizado para liberar a sala de experimento
+  liberateRoom:{
+    type: Boolean,
+    required: false,
+    default: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

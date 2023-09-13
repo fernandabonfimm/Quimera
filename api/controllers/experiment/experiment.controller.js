@@ -248,4 +248,21 @@ module.exports = {
 
     return resp.json({ data });
   },
+  // Função que realiza o update da sala e altera o valor de liberateRoom para true
+  async updateLiberateRoom(req, res) {
+    try {
+      const { id } = req.params;
+      const { liberateRoom } = req.body;
+
+      const experiment = await Experiment.findByIdAndUpdate(id, {
+        liberateRoom,
+      });
+
+      return res.status(200).json({ experiment });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ error: "Error updating experiment" });
+    }
+  },
+
 };

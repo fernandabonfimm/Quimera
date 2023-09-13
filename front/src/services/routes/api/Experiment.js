@@ -46,7 +46,15 @@ async function getTotalCorrectGraphic(id) {
   return await api.get(`/experiments/${id}/graphic`);
 }
 
+// rota para editar o liberateRoom e liberar a sala de experimento
+async function liberateRoom(id, body) {
+  return await api.put(`/experiments/liberateRoom/${id}`, body);
+}
 
+//rota que devolva a liberateRoom para o front
+async function getLiberateRoom(id) {
+  return await api.get(`/experiments/getLiberateRoom/${id}`);
+}
 
 export {
   getDataByPin,
@@ -60,5 +68,6 @@ export {
   getGraphic,
   getInicialGraphic,
   getTotalCorrectGraphic,
-
+  liberateRoom,
+  getLiberateRoom
 };

@@ -13,13 +13,12 @@ import {
   getGraphic,
   getDataByPin,
   getInicialGraphic,
+  getLiberateRoom,
 } from "../../../services/routes/api/Experiment";
 import { postAnswer } from "../../../services/routes/api/AuthStudent";
 
 const Experiment = () => {
   const { pin } = useParams();
-  const buttonClicked = localStorage.getItem("buttonClicked");
-
   const idStudent = localStorage.getItem("idStudent");
   const storedName = localStorage.getItem("name");
   const [showB1, setShowB1] = React.useState(false);
@@ -32,6 +31,7 @@ const Experiment = () => {
   const [graphic, setGraphic] = React.useState({});
   const [inicialGraphic, setInicialGraphic] = React.useState({});
   const [experimentData, setExperimentData] = React.useState([]);
+  const [liberateRoomValue, setLiberateRoomValue] = React.useState(false);
 
   React.useEffect(() => {
     console.log(experimentData.title);
@@ -50,6 +50,15 @@ const Experiment = () => {
     getDataByPin(pin).then((response) => {
       setExperimentData(response.data.experiment);
     });
+  }, []);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      getDataByPin(pin).then((response) => {
+        setLiberateRoomValue(response.data.experiment.liberateRoom);
+      });
+    }, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleSelectOptionB1 = (option) => {
@@ -94,7 +103,6 @@ const Experiment = () => {
     };
     setAnswerOneStorage(answerOne.label);
     setAnswerTwoStorage(answerTwo.label);
-    console.log(answer);
     postAnswer(idStudent, answer).then((response) => {
       Swal.fire({
         icon: "success",
@@ -147,7 +155,7 @@ const Experiment = () => {
       nameofuser={storedName}
       children={
         <div className="divCol">
-          {buttonClicked && (
+          {liberateRoomValue && (
             <Card className="notaCard">
               <h3 className="titleNotaCard">
                 SUA NOTA FOI:{" "}
@@ -171,7 +179,7 @@ const Experiment = () => {
                 <div className="contentB1-Choices">
                   {!showB1 && (
                     <div className="content-ButtonAndLabel">
-                      {!buttonClicked && (
+                      {!liberateRoomValue && (
                         <button
                           onClick={() => setShowB1(true)}
                           className="button-Experiment"
@@ -186,7 +194,7 @@ const Experiment = () => {
                   )}
                   {showB1 && (
                     <>
-                      {!buttonClicked && (
+                      {!liberateRoomValue && (
                         <button
                           onClick={() => setShowB1(false)}
                           className="button-Experiment"
@@ -212,7 +220,7 @@ const Experiment = () => {
                 <div className="contentB1-Choices">
                   {!showB2 && (
                     <div className="content-ButtonAndLabel">
-                      {!buttonClicked && (
+                      {!liberateRoomValue && (
                         <button
                           onClick={() => setShowB2(true)}
                           className="button-Experiment"
@@ -227,7 +235,7 @@ const Experiment = () => {
                   )}
                   {showB2 && (
                     <>
-                      {!buttonClicked && (
+                      {!liberateRoomValue && (
                         <button
                           onClick={() => setShowB2(false)}
                           className="button-Experiment"
@@ -256,7 +264,7 @@ const Experiment = () => {
                     disabled={isButtonDisabled}
                     onClick={handleButtonDisabled}
                   >
-                    {buttonClicked
+                    {liberateRoomValue
                       ? "Experimento realizado"
                       : "Realizar Experimento"}
                   </button>
@@ -264,7 +272,7 @@ const Experiment = () => {
               </div>
             </Card>
             <Card className="card-chartsExperiment">
-              {buttonClicked && (
+              {liberateRoomValue && (
                 <>
                   {answerOneStorage === "Hipotálamo" &&
                   answerTwoStorage === "ADH" ? (
@@ -293,22 +301,22 @@ const Experiment = () => {
                   )}
                 </>
               )}
-              {!buttonClicked && (
+              {!liberateRoomValue && (
                 <>
                   <h3>Aguardando o resultado ser liberada pelo professor</h3>
                 </>
               )}
               <div className="contentChart-cardExperiment">
-                {(buttonClicked && graphic?.data?.expectedValue) ||
-                (!buttonClicked && inicialGraphic?.data?.expectedValue) ? (
+                {(liberateRoomValue && graphic?.data?.expectedValue) ||
+                (!liberateRoomValue && inicialGraphic?.data?.expectedValue) ? (
                   <WaterfallChart
                     experimentData={
-                      buttonClicked
+                      liberateRoomValue
                         ? graphic?.data.expectedValue
                         : inicialGraphic?.data.expectedValue
                     }
                     studentData={
-                      buttonClicked
+                      liberateRoomValue
                         ? graphic?.data.studentValue
                         : inicialGraphic?.data.studentValue
                     }

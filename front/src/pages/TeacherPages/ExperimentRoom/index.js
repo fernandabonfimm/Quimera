@@ -4,19 +4,20 @@ import BaseAuth from "../../../components/BaseAuth";
 import { Card, Button } from "antd";
 import { useParams } from "react-router-dom";
 import { getStudentByPin } from "../../../services/routes/api/AuthStudent";
-import { findExperimentById } from "../../../services/routes/api/Experiment";
+import {
+  findExperimentById,
+  liberateRoom,
+} from "../../../services/routes/api/Experiment";
 import { HiOutlineArrowLeft } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
-import { ButtonContext } from "context/Autorization/Autorização";
 import Swal from "sweetalert2";
 
 export default function ExperimentRoom() {
-  const { handleButtonClick } = React.useContext(ButtonContext);
-  const buttonClicked = localStorage.getItem("buttonClicked");
   const navigate = useNavigate();
   const { idValue, pinValue } = useParams();
   const [students, setStudents] = React.useState([]);
   const [responseExperiment, setResponseExperiment] = React.useState([]);
+  const [buttonClicked, setButtonClicked] = React.useState(false);
 
   const handleGoBack = () => {
     Swal.fire({
@@ -69,7 +70,10 @@ export default function ExperimentRoom() {
           icon: "success",
           title: "Resultado liberado com sucesso!",
         });
-        handleButtonClick();
+        liberateRoom(idValue, { liberateRoom: true }).then((response) => {
+          console.log("response liberateRoom:",response);
+        });
+        setButtonClicked(true);
       }
     });
   };

@@ -7,6 +7,9 @@ const routes = express.Router();
 
 routes.post("/experiments/:teacherId", ExperimentController.create);
 
+// Rota para liberar a sala de experimento
+routes.put("/experiments/liberateRoom/:id", ExperimentController.updateLiberateRoom);
+
 routes.delete("/experiments/:id", ExperimentController.delete);
 
 routes.get("/experiments/pin/:pin", ExperimentController.findByPin);
