@@ -13,7 +13,6 @@ import {
   getGraphic,
   getDataByPin,
   getInicialGraphic,
-  getLiberateRoom,
 } from "../../../services/routes/api/Experiment";
 import { postAnswer } from "../../../services/routes/api/AuthStudent";
 
