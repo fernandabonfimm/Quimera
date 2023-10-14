@@ -11,11 +11,13 @@ import Experiment from "../pages/StudentPages/Experiment";
 import WaitingRoom from "../pages/StudentPages/WaitingRoom";
 import ExperimentRoom from "../pages/TeacherPages/ExperimentRoom";
 import ExperimentDetailsTeacher from "../pages/TeacherPages/Home/experimentDetails/experimentDetails"
+import HomePage from "pages/Home";
 
 const RoutesComponent = () => {
   return (
     <Routes>
-      <Route path="/" element={<LoginPin />} />
+      <Route path="/" element={<HomePage />} />
+      <Route path="/loginPin" element={<LoginPin />} />
       <Route path="/loginTeacher" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgotpassword" element={<ForgotPassword />} />

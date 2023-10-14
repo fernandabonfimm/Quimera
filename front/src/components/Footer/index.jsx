@@ -12,9 +12,10 @@ const FooterComponent = () => {
         <Row gutter={[32, 22]}>
           <Col xs={24} xl={24}>
             <span className="description-footer">
-              Developed with
+              © 2023 Quimera - Todos os direitos reservado | Desenvolvido com
               <AiOutlineHeart className="icon-footer" />
-              by <a href="https://fernandabonfim.tech/">fernandabonfim.tech</a>
+              por{" "}
+              <a href="https://fernandabonfim.tech/">FB - Software Developer</a>
             </span>
           </Col>
         </Row>
