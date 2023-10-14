@@ -8,7 +8,7 @@ const WaitingRoom = () => {
   const navigate = useNavigate();
   React.useEffect(() => {
     const timeoutId = setTimeout(() => {
-      navigate(`/cliniccasewater/${pin}`);
+      navigate(`/introductionwater/${pin}`);
     }, 5000);
     return () => clearTimeout(timeoutId);
   }, [pin]);

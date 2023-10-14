@@ -61,13 +61,13 @@ const ClinicCaseWater = () => {
             </Col>
           </Row>
           <div className="divButtonIniciate">
-            <h1 className="titleIniciate">Pronto para iniciar o experimento?</h1>
+            <h1 className="titleIniciate">Pronto para iniciar o tratamento?</h1>
             <span className="descCCWater">
                 O limiar da sede desencadeará um rigoroso controle homeostático
                 no corpo desse animal.{" "}
               </span>
             <Button className="btnIniciate" type="primary" onClick={navigateToExperiment}>
-              Iniciar Experimento
+              Iniciar o tratamento
             </Button>
           </div>
         </Card>

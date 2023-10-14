@@ -150,9 +150,8 @@
 }
 
 .Orange:hover {
-    box-shadow: rgb(233, 201, 115) 0px 5px 50px;
-    background-color: #f58320;
-
+  box-shadow: rgb(233, 201, 115) 0px 5px 50px;
+  background-color: #f58320;
 }
 
 .Yellow {
@@ -161,7 +160,6 @@
 }
 
 .Yellow:hover {
-    box-shadow: rgb(233, 225, 115) 0px 5px 50px;
-    background-color: #fac31e;
-
+  box-shadow: rgb(233, 225, 115) 0px 5px 50px;
+  background-color: #fac31e;
 }
