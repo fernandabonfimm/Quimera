@@ -12,7 +12,6 @@ const { Content } = Layout;
 const Base = ({ children, goTo, Icon, goToName, titlepage }) => {
   const navigate = useNavigate();
   const teacherContext = useContext(TeacherContext);
-
   return (
     <>
       <Layout style={{ minHeight: "100vh" }}>

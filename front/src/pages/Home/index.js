@@ -33,6 +33,7 @@ const Home = () => {
             dela, professores podem criar experimentos e alunos podem interagir
             com eles em tempo real.
           </p>
+          <h2 className="titleHomepage">Escolha um experimento:</h2>
         </Card>
         <Row gutter={[32, 22]}>
           <Col xs={24} xl={12}>

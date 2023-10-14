@@ -147,7 +147,7 @@ const Experiment = () => {
 
   return (
     <Base
-      goTo={"/dashboard"}
+      goTo={"/"}
       Icon={<MdOutlineBiotech />}
       goToName={"Experimento"}
       titlepage={`a sala de experimento: ${pin}, `}

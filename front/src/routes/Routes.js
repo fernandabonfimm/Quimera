@@ -12,11 +12,12 @@ import WaitingRoom from "../pages/StudentPages/WaitingRoom";
 import ExperimentRoom from "../pages/TeacherPages/ExperimentRoom";
 import ExperimentDetailsTeacher from "../pages/TeacherPages/Home/experimentDetails/experimentDetails"
 import HomePage from "pages/Home";
-
+import ClinicCaseWater from "pages/StudentPages/ClinicCaseWater";
 const RoutesComponent = () => {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
+      <Route path="/cliniccasewater/:pin" element={<ClinicCaseWater />} />
       <Route path="/loginPin" element={<LoginPin />} />
       <Route path="/loginTeacher" element={<Login />} />
       <Route path="/register" element={<Register />} />
